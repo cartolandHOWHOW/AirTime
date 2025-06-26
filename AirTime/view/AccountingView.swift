@@ -40,6 +40,7 @@ struct AccountingView: View {
     let categories = ["餐費", "交通費", "小費", "門票","其他"]
 
     var body: some View {
+        let totalAmount = records.reduce(0) { $0 + $1.amount }
         VStack(spacing: 20) {
             Text("旅遊記帳本")
                 .font(.largeTitle)
@@ -84,9 +85,18 @@ struct AccountingView: View {
             Divider()
 
             ScrollView {
+                Text("💵 總支出：$\(Int(totalAmount)) 元")
+                    .font(.title3)
+                    .bold()
+                    .foregroundColor(.blue)
+                    .padding(.top, 10)
+                
+                
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
                     ForEach(records) { record in
                         VStack(spacing: 5) {
+                            
+                            
                             Text(record.category)
                                 .font(.headline)
 
