@@ -36,6 +36,18 @@ struct GameSelectionView: View {
             title: "真心話大冒險",
             imageName: "airplane",
             destinationView: AnyView(TruthOrDareView())
+        ),
+        
+        GameItem(
+            title: "啟動羅盤",
+            imageName: "location.north.line", // 可以換其他 compass 圖示
+            destinationView: AnyView(CompassView())
+        ),
+        
+        GameItem(
+            title: "記帳本",
+            imageName: "book.fill",
+            destinationView: AnyView(AccountingView())
         )
         
         // 未來新增更多只要加在這裡就行
