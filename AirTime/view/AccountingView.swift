@@ -83,13 +83,17 @@ struct AccountingView: View {
             }
 
             Divider()
-
+            
+            PieChartView(records: records)
+                .padding(.bottom, 10)
+            
             ScrollView {
                 Text("💵 總支出：$\(Int(totalAmount)) 元")
                     .font(.title3)
                     .bold()
                     .foregroundColor(.blue)
                     .padding(.top, 10)
+                
                 
                 
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
