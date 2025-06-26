@@ -7,13 +7,37 @@
 import SwiftUI
 
 struct GameSelectionView: View {
-    // 遊戲清單（目前只有一個）
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     let games: [GameItem] = [
+        
+        GameItem(
+            title: "敲磚遊戲",
+            imageName: "circle.grid.hex", // 或用 "gamecontroller"
+            destinationView: AnyView(BrickBreakerView())
+        ),
+        
+        GameItem(
+            title: "查看目前位置",
+            imageName: "map",
+            destinationView: AnyView(MapFeatureView())
+        ),
+        
+        
         GameItem(
             title: "真心話大冒險",
             imageName: "airplane",
             destinationView: AnyView(TruthOrDareView())
         )
+        
         // 未來新增更多只要加在這裡就行
     ]
 
@@ -49,7 +73,7 @@ struct GameSelectionView: View {
             }
             .padding()
         }
-        .navigationTitle("選擇遊戲")
+        .navigationTitle("選擇功能")
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
     }
 }

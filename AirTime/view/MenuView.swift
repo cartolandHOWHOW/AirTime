@@ -9,8 +9,10 @@ import SwiftUI
 
 import SwiftUI
 
+
+
 struct MenuView: View {
-    let backgroundImages = ["ForMenu", "ForMenu02"]
+    let backgroundImages = ["ForMenu", "ForMenu02","ForMenu03","ForMenu04"]
     @State private var currentImageIndex = 0
     let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
 
@@ -22,7 +24,7 @@ struct MenuView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-                    .animation(.easeInOut(duration: 1.0), value: currentImageIndex)
+                    .animation(.easeIn(duration: 1.0), value: currentImageIndex)
 
                 // 把 Air Time 移到螢幕頂端
                 VStack {
@@ -47,7 +49,7 @@ struct MenuView: View {
                     }
                     .buttonStyle(MainMenuButtonStyle())
 
-                    Button("遊戲說明") { }
+                    Button("說明書") { }
                         .buttonStyle(MainMenuButtonStyle())
 
                     Button("設定") { }
