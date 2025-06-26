@@ -48,6 +48,12 @@ struct GameSelectionView: View {
             title: "記帳本",
             imageName: "book.fill",
             destinationView: AnyView(AccountingView())
+        ),
+        
+        GameItem(
+            title: "聊天木頭人",
+            imageName: "person.crop.square.filled.and.at.rectangle",
+            destinationView: AnyView(WoodenManView())
         )
         
         // 未來新增更多只要加在這裡就行
