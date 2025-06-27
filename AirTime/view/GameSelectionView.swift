@@ -51,9 +51,15 @@ struct GameSelectionView: View {
         ),
         
         GameItem(
-            title: "聊天木頭人",
+            title: "聊天機器人",
             imageName: "person.crop.square.filled.and.at.rectangle",
             destinationView: AnyView(WoodenManView())
+        ),
+        
+        GameItem(
+            title: "備忘錄",
+            imageName: "note.text",
+            destinationView: AnyView(MemoView())
         )
         
         // 未來新增更多只要加在這裡就行
