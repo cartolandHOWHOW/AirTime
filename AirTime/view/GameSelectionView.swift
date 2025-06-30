@@ -60,6 +60,12 @@ struct GameSelectionView: View {
             title: "備忘錄",
             imageName: "note.text",
             destinationView: AnyView(MemoView())
+        ),
+        
+        GameItem(
+          title: "免簽國家查詢",
+          imageName: "airplane.circle",
+          destinationView: AnyView(VisaFreeView())
         )
         
         // 未來新增更多只要加在這裡就行
