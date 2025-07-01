@@ -7,7 +7,7 @@
 //CWA-CA717115-1ACE-45CE-A883-39CE6576D10A
 import SwiftUI
 
-struct WeatherView: View {
+struct DomesticWeatherView: View {
     @State private var selectedCity = "臺北市"
     @State private var weatherInfo = "讀取中..."
 

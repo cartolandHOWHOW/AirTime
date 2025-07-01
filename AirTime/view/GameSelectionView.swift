@@ -75,10 +75,15 @@ struct GameSelectionView: View {
         ),
         
         GameItem(
-            title: "天氣預報",
+            title: "國內天氣預報",
             imageName: "cloud.sun.fill",
-            destinationView: AnyView(WeatherView())
-        )
+            destinationView: AnyView(DomesticWeatherView())
+        ),
+        
+        GameItem(title: "國外天氣預報",
+                 imageName: "cloud.sun.fill.airplane",
+                 destinationView: AnyView(ForeignWeatherView())
+        ),
         
         // 未來新增更多只要加在這裡就行
     ]
