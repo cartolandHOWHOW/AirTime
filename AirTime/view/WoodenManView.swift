@@ -49,7 +49,7 @@ struct WoodenManView: View {
             }
             .padding()
         }
-        .navigationTitle("聊天木頭人")
+        .navigationTitle("Processing")
     }
 
     func sendMessage() {

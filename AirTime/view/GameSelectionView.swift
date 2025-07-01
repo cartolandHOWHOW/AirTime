@@ -66,6 +66,18 @@ struct GameSelectionView: View {
           title: "免簽國家查詢",
           imageName: "airplane.circle",
           destinationView: AnyView(VisaFreeView())
+        ),
+        
+        GameItem(
+            title: "旅行打包清單",
+            imageName: "checklist.checked",
+            destinationView: AnyView(PackingListView())
+        ),
+        
+        GameItem(
+            title: "天氣預報",
+            imageName: "cloud.sun.fill",
+            destinationView: AnyView(WeatherView())
         )
         
         // 未來新增更多只要加在這裡就行
