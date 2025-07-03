@@ -19,11 +19,11 @@ struct GameSelectionView: View {
     
     let games: [GameItem] = [
         
-        GameItem(
-            title: "敲磚遊戲",
-            imageName: "circle.grid.hex", // 或用 "gamecontroller"
-            destinationView: AnyView(BrickBreakerView())
-        ),
+//        GameItem(
+//            title: "敲磚遊戲",
+//            imageName: "circle.grid.hex", // 或用 "gamecontroller"
+//            destinationView: AnyView(BrickBreakerView())
+//        ),
         
         GameItem(
             title: "查看目前位置",
@@ -75,15 +75,23 @@ struct GameSelectionView: View {
         ),
         
         GameItem(
-            title: "國內天氣預報",
+            title: "天氣預報",
             imageName: "cloud.sun.fill",
-            destinationView: AnyView(DomesticWeatherView())
+            destinationView: AnyView(WeatherView())
         ),
         
-        GameItem(title: "國外天氣預報",
-                 imageName: "cloud.sun.fill.airplane",
-                 destinationView: AnyView(ForeignWeatherView())
+        GameItem(
+            title: "各國匯率查詢",
+            imageName: "dollarsign.circle",
+            destinationView: AnyView(ExchangeRateView())
         ),
+        
+        GameItem(title: "英文單字練習",
+                 imageName: "airplane",
+                 destinationView: AnyView(VocabularyView())
+        ),
+        
+        
         
         // 未來新增更多只要加在這裡就行
     ]

@@ -19,6 +19,7 @@ struct PackingCategory: Identifiable, Codable, Equatable {
 }
 
 struct PackingListView: View {
+    
     @State private var categories: [PackingCategory] = []
     private let storageKey = "packing_list"
 
@@ -33,7 +34,9 @@ struct PackingListView: View {
                     }
                 }
             }
+            
         }
+        
         .navigationTitle("旅行打包清單")
         .onAppear {
             loadData()
@@ -107,7 +110,9 @@ struct PackingListView: View {
                 .init(name: "換洗衣物", isChecked: false),
                 .init(name: "備用眼鏡", isChecked: false),
                 .init(name: "泳衣", isChecked: false),
+                .init(name: "自拍棒", isChecked: false),
             ])
+            
         ]
     }
 }
