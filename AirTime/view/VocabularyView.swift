@@ -8,6 +8,10 @@ import SwiftUI
 import Foundation // Make sure Foundation is imported for Data and JSONDecoder
 import AVFoundation
 
+
+
+
+
 // Define your VocabularyWord struct - crucial for JSON decoding!
 // Make sure this is in the same file or accessible to VocabularyView
 struct VocabularyWord: Codable, Identifiable, Hashable {
@@ -20,7 +24,7 @@ struct VocabularyWord: Codable, Identifiable, Hashable {
 
 
 struct VocabularyView: View {
-    @Binding var collectedWordIDs: Set<String>
+    @State private var collectedWordIDs: Set<String> = []
     @State private var words: [VocabularyWord] = []
     @State private var errorMessage: String? // Optional: to display error in UI
     
@@ -38,12 +42,14 @@ struct VocabularyView: View {
     
     func toggleCollection(for word: VocabularyWord) {
         if collectedWordIDs.contains(word.id) {
-            collectedWordIDs.remove(word.id)
+            VocabularyDatabase.shared.removeCollected(id: word.id)
         } else {
-            collectedWordIDs.insert(word.id)
+            VocabularyDatabase.shared.saveCollected(id: word.id)
         }
+
+        // 重新載入資料
+        collectedWordIDs = VocabularyDatabase.shared.loadCollectedIDs()
     }
-    
     
     
     
@@ -115,6 +121,7 @@ struct VocabularyView: View {
         }
         .onAppear {
             loadVocabulary()
+            collectedWordIDs = VocabularyDatabase.shared.loadCollectedIDs()
         }
     }
 
@@ -169,17 +176,13 @@ struct VocabularyView: View {
             print("❌ 一般錯誤：解碼 Vocab.json 時發生未知錯誤：\(error.localizedDescription)")
             self.errorMessage = "載入 Vocab.json 時發生未知錯誤。"
         }
+    
     }
 }
-
 struct CollectedView: View {
-    var collectedWordIDs: Set<String> // ✅ ← 修改這裡
-    @State private var allWords: [VocabularyWord] = []
- 
+    @State private var collectedWords: [VocabularyWord] = []
 
     var body: some View {
-        let collectedWords = allWords.filter { collectedWordIDs.contains($0.id) }
-
         List(collectedWords) { word in
             VStack(alignment: .leading) {
                 Text(word.english_word)
@@ -193,16 +196,23 @@ struct CollectedView: View {
         }
         .navigationTitle("📚 收藏清單")
         .onAppear {
-            loadVocabulary()
+            loadCollectedWords()
         }
     }
 
-    func loadVocabulary() {
+    func loadCollectedWords() {
+        // 載入所有單字
         guard let url = Bundle.main.url(forResource: "Vocab", withExtension: "json"),
               let data = try? Data(contentsOf: url),
-              let decoded = try? JSONDecoder().decode([VocabularyWord].self, from: data) else {
+              let allWords = try? JSONDecoder().decode([VocabularyWord].self, from: data) else {
             return
         }
-        self.allWords = decoded
+
+        // 從 SQLite 載入收藏 ID
+        let collectedIDs = VocabularyDatabase.shared.loadCollectedIDs()
+
+        // 過濾出被收藏的單字
+        self.collectedWords = allWords.filter { collectedIDs.contains($0.id) }
     }
 }
+ 

@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		50E7336F2E17AA3A007FD09E /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 50E7336E2E17AA3A007FD09E /* SQLite */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		50A302C22E0CE2B100555DB1 /* AirTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50E7336F2E17AA3A007FD09E /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = AirTime;
 			packageProductDependencies = (
+				50E7336E2E17AA3A007FD09E /* SQLite */,
 			);
 			productName = AirTime;
 			productReference = 50A302C22E0CE2B100555DB1 /* AirTime.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 50A302B92E0CE2B100555DB1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				50E7336D2E17AA3A007FD09E /* XCRemoteSwiftPackageReference "SQLite" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 50A302C32E0CE2B100555DB1 /* Products */;
 			projectDirPath = "";
@@ -328,6 +337,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		50E7336D2E17AA3A007FD09E /* XCRemoteSwiftPackageReference "SQLite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		50E7336E2E17AA3A007FD09E /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 50E7336D2E17AA3A007FD09E /* XCRemoteSwiftPackageReference "SQLite" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 50A302BA2E0CE2B100555DB1 /* Project object */;
 }
