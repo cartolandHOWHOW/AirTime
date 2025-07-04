@@ -6,11 +6,12 @@
 //
 import SwiftUI
 import Foundation // Make sure Foundation is imported for Data and JSONDecoder
+import AVFoundation
 
 // Define your VocabularyWord struct - crucial for JSON decoding!
 // Make sure this is in the same file or accessible to VocabularyView
-struct VocabularyWord: Codable, Identifiable {
-    let id = UUID() // Required for Identifiable
+struct VocabularyWord: Codable, Identifiable, Hashable {
+    var id: String { english_word } // 以英文單字作為唯一識別碼
     let english_word: String
     let part_of_speech: String
     let chinese_meaning: String
@@ -19,25 +20,74 @@ struct VocabularyWord: Codable, Identifiable {
 
 
 struct VocabularyView: View {
+    @Binding var collectedWordIDs: Set<String>
     @State private var words: [VocabularyWord] = []
     @State private var errorMessage: String? // Optional: to display error in UI
-
+    
+    
+    func speak(_ word: String) {
+        let utterance = AVSpeechUtterance(string: word)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        utterance.rate = 0.5 // 語速可調整 0.0 ~ 1.0
+        let synthesizer = AVSpeechSynthesizer()
+        synthesizer.speak(utterance)
+    }
+    
+    
+    
+    
+    func toggleCollection(for word: VocabularyWord) {
+        if collectedWordIDs.contains(word.id) {
+            collectedWordIDs.remove(word.id)
+        } else {
+            collectedWordIDs.insert(word.id)
+        }
+    }
+    
+    
+    
+    
+    
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(words) { word in
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(word.english_word)
-                        .font(.headline)
-                    Text("\(word.part_of_speech) - \(word.chinese_meaning)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Text("例句：\(word.example_sentence)")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(word.english_word)
+                            .font(.headline)
+                        Text("\(word.part_of_speech) - \(word.chinese_meaning)")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        Text("例句：\(word.example_sentence)")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    }
+                    
+
+                    Spacer() // 把星星推到右邊
+                    
+                    Button(action: {
+                        speak(word.english_word)
+                    }) {
+                        Image(systemName: "speaker.wave.2.fill")
+                            .foregroundColor(.blue)
+                    }
+                    .buttonStyle(.plain)
+                    
+                    
+                    Button(action: {
+                        toggleCollection(for: word)
+                    }) {
+                        Image(systemName: collectedWordIDs.contains(word.id) ? "star.fill" : "star")
+                            .foregroundColor(.yellow)
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.vertical, 4)
             }
-            .navigationTitle("英語單字訓練")
+            
+            //.navigationTitle("英語單字訓練")
             .overlay(
                 // Display error message if loading fails
                 Group {
@@ -119,5 +169,40 @@ struct VocabularyView: View {
             print("❌ 一般錯誤：解碼 Vocab.json 時發生未知錯誤：\(error.localizedDescription)")
             self.errorMessage = "載入 Vocab.json 時發生未知錯誤。"
         }
+    }
+}
+
+struct CollectedView: View {
+    var collectedWordIDs: Set<String> // ✅ ← 修改這裡
+    @State private var allWords: [VocabularyWord] = []
+ 
+
+    var body: some View {
+        let collectedWords = allWords.filter { collectedWordIDs.contains($0.id) }
+
+        List(collectedWords) { word in
+            VStack(alignment: .leading) {
+                Text(word.english_word)
+                    .font(.headline)
+                Text("\(word.part_of_speech) - \(word.chinese_meaning)")
+                    .font(.subheadline)
+                Text("例句：\(word.example_sentence)")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
+        }
+        .navigationTitle("📚 收藏清單")
+        .onAppear {
+            loadVocabulary()
+        }
+    }
+
+    func loadVocabulary() {
+        guard let url = Bundle.main.url(forResource: "Vocab", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let decoded = try? JSONDecoder().decode([VocabularyWord].self, from: data) else {
+            return
+        }
+        self.allWords = decoded
     }
 }

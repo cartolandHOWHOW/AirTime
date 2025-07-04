@@ -88,7 +88,7 @@ struct GameSelectionView: View {
         
         GameItem(title: "英文單字練習",
                  imageName: "airplane",
-                 destinationView: AnyView(VocabularyView())
+                 destinationView: AnyView(VocabularyMainView())
         ),
         
         

@@ -13,7 +13,7 @@ struct PackingItem: Identifiable, Codable, Equatable {
 }
 
 struct PackingCategory: Identifiable, Codable, Equatable {
-    let id = UUID()
+    var id = UUID()
     let title: String
     var items: [PackingItem]
 }
@@ -111,6 +111,7 @@ struct PackingListView: View {
                 .init(name: "備用眼鏡", isChecked: false),
                 .init(name: "泳衣", isChecked: false),
                 .init(name: "自拍棒", isChecked: false),
+                .init(name: "個人藥物", isChecked: false)
             ])
             
         ]
