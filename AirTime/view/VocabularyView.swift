@@ -24,6 +24,7 @@ struct VocabularyWord: Codable, Identifiable, Hashable {
 
 
 struct VocabularyView: View {
+    @State private var showQuiz = false
     @State private var collectedWordIDs: Set<String> = []
     @State private var words: [VocabularyWord] = []
     @State private var errorMessage: String? // Optional: to display error in UI
@@ -80,8 +81,7 @@ struct VocabularyView: View {
                             .foregroundColor(.blue)
                     }
                     .buttonStyle(.plain)
-                    
-                    
+                                        
                     Button(action: {
                         toggleCollection(for: word)
                     }) {
@@ -89,6 +89,14 @@ struct VocabularyView: View {
                             .foregroundColor(.yellow)
                     }
                     .buttonStyle(.plain)
+                    
+//                    Button(action: {
+//                        print("🟡 點了星星按鈕：\(word.english_word)")
+//                        toggleCollection(for: word)
+//                    }) {
+//                        Image(systemName: collectedWordIDs.contains(word.id) ? "star.fill" : "star")
+//                            .foregroundColor(.yellow)
+//                    }
                 }
                 .padding(.vertical, 4)
             }
@@ -118,11 +126,25 @@ struct VocabularyView: View {
                     }
                 }
             )
+            .navigationTitle("英語單字訓練") // ✅ <--- 加上這行
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("考試") {
+                    showQuiz = true
+                }
+            }
+        }
+        
+        .sheet(isPresented: $showQuiz) {
+            QuizView(words: words)
+        }
+        
         .onAppear {
             loadVocabulary()
             collectedWordIDs = VocabularyDatabase.shared.loadCollectedIDs()
         }
+        
     }
 
     func loadVocabulary() {
@@ -216,3 +238,71 @@ struct CollectedView: View {
     }
 }
  
+struct QuizView: View {
+    let words: [VocabularyWord]
+    @Environment(\.dismiss) var dismiss
+    @State private var options: [VocabularyWord] = []
+    @State private var question: VocabularyWord?
+    @State private var feedback: String = ""
+
+    var body: some View {
+        VStack(spacing: 20) {
+            if let question = question {
+                Text("❓ 這個英文單字的中文意思是？")
+                    .font(.title2)
+                Text(question.english_word)
+                    .font(.largeTitle)
+                    .bold()
+
+                ForEach(options, id: \.id) { option in
+                    Button(action: {
+                        checkAnswer(option)
+                    }) {
+                        Text(option.chinese_meaning)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue.opacity(0.1))
+                            .cornerRadius(10)
+                    }
+                }
+
+                Text(feedback)
+                    .font(.headline)
+                    .foregroundColor(.purple)
+                    .padding(.top, 10)
+
+                HStack {
+                    Button("再出一題") {
+                        generateQuestion()
+                        feedback = ""
+                    }
+
+                    Button("結束考試") {
+                        dismiss()
+                    }
+                }
+                .padding(.top)
+            } else {
+                Text("載入題目中...")
+            }
+        }
+        .padding()
+        .onAppear {
+            generateQuestion()
+        }
+    }
+
+    func generateQuestion() {
+        let shuffled = words.shuffled()
+        options = Array(shuffled.prefix(4))
+        question = options.randomElement()
+    }
+
+    func checkAnswer(_ selected: VocabularyWord) {
+        if selected.id == question?.id {
+            feedback = "✅ 恭喜答對！"
+        } else {
+            feedback = "❌ 答錯了，正確答案是：\(question?.chinese_meaning ?? "")"
+        }
+    }
+}

@@ -11,7 +11,8 @@ import SwiftUI
 struct AirTimeApp: App {
     var body: some Scene {
         WindowGroup {
-            MenuView()
+            SqliteSample()
+            //MenuView()
         }
     }
 }
